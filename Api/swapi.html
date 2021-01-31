@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Wars</title>
+</head>
+<body>
+    <h1>Star Wars Characters</h1>
+
+    <script>
+        const url = `https://swapi.dev/api/people/4`;
+        const httpRequest = new XMLHttpRequest();
+
+        httpRequest.addEventListener('loadend' , function(e) {
+            console.log(this);
+        })
+    </script>
+</body>
+</html>
