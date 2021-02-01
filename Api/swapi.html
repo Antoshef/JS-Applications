@@ -7,13 +7,24 @@
 </head>
 <body>
     <h1>Star Wars Characters</h1>
-
+    <ul class="characters">
+    </ul>
+    <button id="load">Get Character</button>
     <script>
-        const url = `https://swapi.dev/api/people/4`;
+        const url = `https://swapi.dev/api/people/`;
         const httpRequest = new XMLHttpRequest();
+        httpRequest.open('GET', url);
 
-        httpRequest.addEventListener('loadend' , function(e) {
-            console.log(this);
+        httpRequest.addEventListener('loadend', function() {
+            let response = JSON.parse(this.responseText);
+            let characters = response.results;
+            console.log(response);
+            document.querySelector('.characters').innerHTML = characters.map(x => `<li>${x.name}</li>`).join('');
+
+        });
+
+        document.getElementById('load').addEventListener('click', function() {
+            httpRequest.send();
         })
     </script>
 </body>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Wars</title>
+</head>
+<body>
+    <h1>Star Wars Characters</h1>
+    <ul class="characters">
+    </ul>
+    <button id="load">Get Character</button>
+    <script>
+        const url = `https://swapi.dev/api/people/`;
+        const listElement = document.querySelector('.characters');
+        
+        document.getElementById('load').addEventListener('click', () => {
+            fetch(url)
+            .then(res => res.json())
+            .then(data => {
+                listElement.innerHTML = data.results.map(x => `<li>${x.name}</li>`).join('');
+            })
+            .catch(err => {
+                listElement.innerHTML = `<li>No Characters</li>`;
+            })
+        })
+    </script>
+</body>
+</html>
