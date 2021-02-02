@@ -1,27 +1,31 @@
 function solve() {
     
-    let currentId;
+    let currentId = 'depot';
+    let name;
     let nextId;
-    let url = `https://judgetests.firebaseio.com/schedule/${currentId}.json`;
+    let url = `https://judgetests.firebaseio.com/schedule/`;
     let departedBtn = document.getElementById('depart');
     let arrivedBtn = document.getElementById('arrive');
     let span = document.getElementsByClassName('info')[0];
-    fetch(url)
+
+    function depart() {
+        fetch(url + currentId + '.json')
         .then(res => res.json())
         .then(data => {
-            span.innerHTML = data.name;
+            span.innerHTML = `Next stop ${data.name}`;
             departedBtn.disabled = true;
             arrivedBtn.disabled = false;
             nextId = data.next;
-            console.log(data);
+            name = data.name;
         });
 
-    function depart(currentId) {
-        currentId = 'depot';
     };
 
     function arrive() {
-        
+        span.innerHTML = `Arrived at ${name}`;
+        currentId = nextId;
+        departedBtn.disabled = false;
+        arrivedBtn.disabled = true;
     }
 
     return {
