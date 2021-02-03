@@ -1,10 +1,9 @@
 function attachEvents() {
 
     class Person {
-        constructor(name, phone) {
-            this.name = name;
+        constructor(person, phone) {
+            this.person = person;
             this.phone = phone;
-            this.id = phone + 'id';
         }
     }
     
@@ -12,21 +11,23 @@ function attachEvents() {
     let btnLoad = document.getElementById('btnLoad');
     let ulElement = document.getElementById('phonebook');
     let btnCreate = document.getElementById('btnCreate');
-    let li = document.createElement('li');
-    let btnDelete = document.createElement('button');
-    btnDelete.textContent = 'Delete';
 
     btnLoad.addEventListener('click', () => {
         fetch(url)
         .then(res => res.json())
         .then(data => {
-            console.log(data);
-            for (let key in data) {
-                li.innerHTML = `${data[key].person}: +${data[key].phone}`;
-                btnDelete.addEventListener('click', deleteElements(data[key].id));
+            let array = Object.entries(data);
+            array.map(x => {
+                let li = document.createElement('li');
+                li.innerHTML = `${x[1].person}: ${x[1].phone}`;
+                let btnDelete = document.createElement('button');
+                btnDelete.textContent = 'Delete';
+                let key = x[0] + '';
+                console.log(key);
+                btnDelete.addEventListener('click', deleteElements(key));
                 li.appendChild(btnDelete);
                 ulElement.appendChild(li);
-            }
+            })
         });
     });
 
@@ -45,13 +46,8 @@ function attachEvents() {
             method: 'POST',
             body: JSON.stringify(person)
         });
-    
-        li.innerHTML = `${person.name}: +${person.phone}`;
-        btnDelete.addEventListener('click', () => {
-            fetch(person, { method: 'DELETE' })
-        });
-        li.appendChild(btnDelete);
-        ulElement.appendChild(li);
+        let list = document.createElement('li');
+        list.innerHTML = `${person.person}: +${person.phone}`;
         name.value = '';
         phone.value = '';
     }
