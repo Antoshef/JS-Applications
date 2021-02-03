@@ -1,4 +1,4 @@
-function attachEvents() {
+function attachEvents() { 
 
     class Person {
         constructor(person, phone) {
@@ -22,9 +22,13 @@ function attachEvents() {
                 li.innerHTML = `${x[1].person}: ${x[1].phone}`;
                 let btnDelete = document.createElement('button');
                 btnDelete.textContent = 'Delete';
-                let key = x[0] + '';
-                console.log(key);
-                btnDelete.addEventListener('click', deleteElements(key));
+                btnDelete.style.marginLeft = '20px';
+                let key = x[0];
+                btnDelete.addEventListener('click', () => {
+                    let deleteUrl = `https://phonebook-nakov.firebaseio.com/phonebook/${key}.json`;
+                    fetch(deleteUrl, { method: 'DELETE' });
+                    btnDelete.parentElement.remove();
+                });
                 li.appendChild(btnDelete);
                 ulElement.appendChild(li);
             })
@@ -32,11 +36,6 @@ function attachEvents() {
     });
 
     btnCreate.addEventListener('click', create);
-
-    function deleteElements(key) {
-        let deleteUrl = `https://phonebook-nakov.firebaseio.com/phonebook/${key}.json`;
-        fetch(deleteUrl, { method: 'DELETE' })
-    }
 
     function create() {
         let name = document.getElementById('person');
