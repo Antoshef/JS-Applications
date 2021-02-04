@@ -29,7 +29,7 @@ function attachEvents() {
             .then(current => {
                 
                 forecast.style.display = 'block';
-                let spanSymbol = document.createElement('span')
+                let spanSymbol = document.createElement('span');
                 spanSymbol.className = 'condition symbol';
                 let symbol = current.forecast.condition;
                 spanSymbol.innerHTML = displaySymbol(symbol);
