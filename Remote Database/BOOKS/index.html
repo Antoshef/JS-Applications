@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Books</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="./styles.css"> 
 </head>
 <body>
     <button id="loadBooks">LOAD ALL BOOKS</button>
+    <div id="error-notification"></div>
+
     <table>
         <thead>
             <tr>
@@ -19,7 +21,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
+            <!-- <tr>
                 <td>Harry Poter</td>
                 <td>J. K. Rowling</td>
                 <td>0-7475-3269-9</td>
@@ -36,20 +38,51 @@
                     <button>Edit</button>
                     <button>Delete</button>
                 </td>
-            </tr>
+            </tr> -->
         </tbody>
     </table>
 
-    <form>
-        <h3>FORM</h3>
+    <form id="create-form">
+        <h3>CREATE FORM</h3>
         <label>TITLE</label>
-        <input type="title" id="title" placeholder="Title...">
+        <input type="title" id="create-title" placeholder="Title...">
         <label>AUTHOR</label>
-        <input type="title" id="author" placeholder="Author...">
+        <input type="title" id="create-author" placeholder="Author...">
         <label>ISBN</label>
-        <input type="title" id="isbn" placeholder="Isnb...">
+        <input type="title" id="create-isbn" placeholder="Isnb...">
         <button>Submit</button>
     </form>
+
+    <form id="edit-form">
+        <h3>EDIT FORM</h3>
+        <label>TITLE</label>
+        <input type="title" id="edit-title" placeholder="Title...">
+        <label>AUTHOR</label>
+        <input type="title" id="edit-author" placeholder="Author...">
+        <label>ISBN</label>
+        <input type="title" id="edit-isbn" placeholder="Isnb...">
+        <button>Edit</button>
+    </form>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/8.2.6/firebase-app.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAdBs7crK-P_1R2SH6SXzr83Epw9KwRCXw",
+    authDomain: "books-exercise-ec332.firebaseapp.com",
+    projectId: "books-exercise-ec332",
+    storageBucket: "books-exercise-ec332.appspot.com",
+    messagingSenderId: "1097049139185",
+    appId: "1:1097049139185:web:3bd4cd77b325d4641b8650"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+</script>
     <script src="./app.js"></script>
 </body>
 </html>
