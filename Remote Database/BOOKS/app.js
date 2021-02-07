@@ -7,12 +7,12 @@ const htmlSelectors = {
     'createIsbn': () => document.getElementById('create-isbn'),
     'booksContainer': () => document.querySelector('table > tbody'),
     'errorContainer': () => document.getElementById('error-notification'),
-    'createForm': document.getElementById('create-form'),
     'editForm': () => document.getElementById('edit-form'),
     'editButton': () => document.querySelector('#edit-form > button'),
     'editAuthor': () => document.getElementById('edit-author'),
     'editTitle': () => document.getElementById('edit-title'),
     'editIsbn': () => document.getElementById('edit-isbn'),
+    'tableBody': () => document.getElementById('table-body'),
 }
 
 htmlSelectors['loadBooks']()
@@ -23,10 +23,16 @@ htmlSelectors['editButton']()
     .addEventListener('click', editBook);
 
 function fetchAllBooks() {
-    fetch('https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/.json')
-        .then(res => res.json())
-        .then(renderBooks)
-        .catch(handleError)
+    if (htmlSelectors['tableBody']().innerHTML == '') {
+        fetch('https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/.json')
+            .then(res => res.json())
+            .then(renderBooks)
+            .catch(handleError)
+        this.innerHTML = 'CLOSE X';
+    } else {
+        htmlSelectors['tableBody']().innerHTML = '';
+        this.innerHTML = 'LOAD ALL BOOKS';
+    }
 }
 
 function renderBooks(booksData) {
@@ -46,36 +52,33 @@ function renderBooks(booksData) {
                 createDOMElement('td', author, {}, {}),
                 createDOMElement('td', isbn, {}, {}),
                 createDOMElement('td', '', {}, {}, 
-                    createDOMElement('button', 'Edit', { 'data-key': bookId }, { click: loadBookById }),
-                    createDOMElement('button', 'Delete', { 'data-key': bookId }, { click: deleteBook })))
-
+                    createDOMElement('button', 'Edit', { 'data-id': bookId }, { click: loadBookById }),
+                    createDOMElement('button', 'Delete', { 'data-id': bookId }, { click: deleteBook })
+                    ))
             booksContainer.appendChild(tableRow);
         })
 }
 
 function deleteBook() {
-    const id = this.getAttribute('data-key');
+    let btn = this;
+    const id = btn.getAttribute('data-id');
 
-    const initObj = {
-        method: 'DELETE'
-    }
-
-    fetch(`https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/${id}/.json`, initObj)
-        .then(loadBookById)
+    fetch(`https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/${id}/.json`, { method: 'DELETE' })
+        .then(fetchAllBooks)
         .catch(handleError);
 }
 
 function loadBookById() {
-    const id = this.getAttribute('data-key');
+    const id = this.getAttribute('data-id');
 
-    fetch(`https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/${id}.json`)
+    fetch(`https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/${id}/.json`)
         .then(res => res.json())
         .then(({ title, author, isbn }) => {
             htmlSelectors['editTitle']().value = title;
             htmlSelectors['editAuthor']().value = author;
             htmlSelectors['editIsbn']().value = isbn;
             htmlSelectors['editForm']().style.display = 'block';
-            htmlSelectors['editButton']().setAttribute('data-key', id);
+            htmlSelectors['editButton']().setAttribute('data-id', id);
         })
         .catch(handleError);
 }
@@ -88,7 +91,7 @@ function editBook(e) {
     const isbnInput = htmlSelectors['editIsbn']();
 
     if (titleInput.value !== '' && authorInput.value !== '' && isbnInput.value !== '') {
-        const id = this.getAttribute('data-key');
+        const id = this.getAttribute('data-id');
         const initObj = {    
             method: 'PUT',
             headers: {
