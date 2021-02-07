@@ -59,11 +59,12 @@ function renderBooks(booksData) {
         })
 }
 
-function deleteBook() {
+function deleteBook(e) {
     let btn = this;
     const id = btn.getAttribute('data-id');
 
     fetch(`https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/${id}/.json`, { method: 'DELETE' })
+        .then(fetchAllBooks)
         .then(fetchAllBooks)
         .catch(handleError);
 }
@@ -101,6 +102,7 @@ function editBook(e) {
         }
         fetch(`https://books-exercise-ec332-default-rtdb.europe-west1.firebasedatabase.app/Books/${id}/.json`, initObj)
             .then(fetchAllBooks)
+            .then(fetchAllBooks)
             .catch(handleError)
 
     htmlSelectors['editForm']().style.display = 'none';
@@ -136,8 +138,6 @@ function handleError(err) {
 }
 
 function createBook(e) {
-    e.preventDefault();
-
     const titleInput = htmlSelectors['createTitle']();
     const authorInput = htmlSelectors['createAuthor']();
     const isbnInput = htmlSelectors['createIsbn']();
@@ -155,9 +155,10 @@ function createBook(e) {
             .then(renderBooks)
             .catch(handleError);
 
-            titleInput.value = '';
-            authorInput.value = '';
-            isbnInput.value = '';
+        titleInput.value = '';
+        authorInput.value = '';
+        isbnInput.value = '';
+        htmlSelectors['loadBooks'].innerHTML = 'LOAD ALL BOOKS';
     } else {
         const error = { message: '' };
 
